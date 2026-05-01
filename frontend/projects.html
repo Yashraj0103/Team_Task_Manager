@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Projects</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <div class="sidebar">
+    <div class="logo">Task Manager</div>
+    <ul>
+      <li onclick="go('dashboard.html')">Dashboard</li>
+      <li class="active">Projects</li>
+      <li onclick="go('tasks.html')">My Tasks</li>
+      <li onclick="go('team.html')">Team</li>
+    </ul>
+
+    <div class="user">John Doe</div>
+  </div>
+
+  <div class="main">
+
+    <div class="header">
+      <div>
+        <h1>Projects</h1>
+        <p class="sub">Create projects and collaborate with your team.</p>
+      </div>
+
+      <button class="primary-btn" onclick="openModal()">
+  + New project
+</button>
+    </div>
+
+    <div class="box">
+      No projects yet — create your first one.
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div id="projectModal" class="modal hidden">
+
+  <div class="modal-box">
+
+    <div class="modal-header">
+      <h2>Create project</h2>
+      <span class="close" onclick="closeModal()">✕</span>
+    </div>
+
+    <label>Name</label>
+    <input id="projectName" placeholder="Project name">
+
+    <label>Description</label>
+    <textarea id="projectDesc" placeholder="Project description"></textarea>
+
+    <div class="modal-actions">
+      <button class="cancel" onclick="closeModal()">Cancel</button>
+      <button class="primary-btn" onclick="createProject()">Create</button>
+    </div>
+
+  </div>
+  <div id="projectList"></div>
+  <div id="projectsContainer"></div>
+
+</div>
+
+<script>
+
+// ---------------- MODAL ----------------
+function openModal() {
+  document.getElementById("projectModal").classList.remove("hidden");
+}
+
+function closeModal() {
+  document.getElementById("projectModal").classList.add("hidden");
+}
+
+// ---------------- NAVIGATION ----------------
+function openProject(id) {
+  window.location.href = `project.html?id=${id}`;
+}
+
+function logout() {
+  localStorage.removeItem("token");
+  window.location.href = "index.html";
+}
+
+function go(page) {
+  window.location.href = page;
+}
+
+// ---------------- LOAD PROJECTS ----------------
+async function loadProjects() {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Please login first");
+    window.location.href = "index.html";
+    return;
+  }
+
+  try {
+    const res = await fetch("http://localhost:5000/api/projects", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
+      }
+    });
+
+    const projects = await res.json();
+
+    const container = document.getElementById("projectsContainer"); // ✅ FIXED ID
+    container.innerHTML = "";
+
+    projects.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "project-card";
+
+      card.innerHTML = `
+        <div class="project-top">
+          <div class="project-icon">📁</div>
+          <span class="role">Owner</span>
+        </div>
+
+        <h3 class="project-title">${p.name}</h3>
+        <p class="project-desc">${p.description || "No description"}</p>
+
+        <div class="project-footer">
+          <span>0 Tasks</span>
+          <button class="open-btn" onclick="openProject('${p._id}')">Open</button>
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+
+  } catch (err) {
+    console.error("Load projects error:", err);
+  }
+}
+
+// ---------------- CREATE PROJECT ----------------
+async function createProject() {
+  const name = document.getElementById("projectName").value;
+  const description = document.getElementById("projectDesc").value;
+
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Login required");
+    return;
+  }
+
+  if (!name) {
+    alert("Project name required");
+    return;
+  }
+
+  try {
+    const res = await fetch("http://localhost:5000/api/projects", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token   // ✅ FIXED
+      },
+      body: JSON.stringify({ name, description })
+    });
+
+    const data = await res.json();
+    console.log("Created:", data);
+
+    if (!res.ok) {
+      alert(data.msg || "Failed to create project");
+      return;
+    }
+
+    // ✅ Clear input
+    document.getElementById("projectName").value = "";
+    document.getElementById("projectDesc").value = "";
+
+    closeModal();
+    loadProjects();
+
+  } catch (err) {
+    console.error("Create project error:", err);
+    alert("Something went wrong");
+  }
+}
+
+// ---------------- INIT ----------------
+loadProjects();
+</script>
+
+</body>
+</html>

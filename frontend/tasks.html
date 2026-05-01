@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Tasks</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <div class="sidebar">
+    <div class="logo">Task Manager</div>
+    <ul>
+      <li onclick="go('dashboard.html')">Dashboard</li>
+      <li onclick="go('projects.html')">Projects</li>
+      <li class="active">My Tasks</li>
+      <li onclick="go('team.html')">Team</li>
+    </ul>
+
+    <div class="user">Yash Raj</div>
+  </div>
+
+  <div class="main">
+
+    <div class="header">
+      <div>
+        <h1>My tasks</h1>
+        <p class="sub">Everything assigned to you across projects.</p>
+      </div>
+    </div>
+
+    <div class="box">
+      No tasks assigned to you.
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+    function go(page) {
+  window.location.href = page;
+}
+
+function logout() {
+  localStorage.removeItem("token");
+  window.location.href = "index.html"; // your login page
+}
+
+</script>
+
+</body>
+</html>

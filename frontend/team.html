@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Team</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <div class="sidebar">
+    <div class="logo">Task Manager</div>
+    <ul>
+      <li onclick="go('dashboard.html')">Dashboard</li>
+      <li onclick="go('projects.html')">Projects</li>
+      <li onclick="go('tasks.html')">My Tasks</li>
+      <li class="active">Team</li>
+    </ul>
+
+    <div class="user">John Doe</div>
+  </div>
+
+  <div class="main">
+
+    <div class="header">
+      <div>
+        <h1>Team</h1>
+        <p class="sub">People who collaborate with you on shared projects.</p>
+      </div>
+    </div>
+
+    <div class="member">
+      <div class="avatar">Y</div>
+
+      <div>
+        <strong>John doe</strong><br>
+        johndoe@gmail.com
+      </div>
+
+      <div class="badge">Member</div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+    function go(page) {
+  window.location.href = page;
+}
+
+function logout() {
+  localStorage.removeItem("token");
+  window.location.href = "index.html"; // your login page
+}
+
+</script>
+
+</body>
+</html>
