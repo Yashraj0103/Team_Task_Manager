@@ -5,7 +5,7 @@ const Task = require("../models/Task");
 const auth = require("../middleware/auth");
 
 
-// ✅ CREATE TASK
+
 router.post("/", auth, async (req, res) => {
   try {
     const { title, project, assignedTo } = req.body;
@@ -30,7 +30,7 @@ router.post("/", auth, async (req, res) => {
 });
 
 
-// ✅ DASHBOARD STATS
+
 router.get("/stats", auth, async (req, res) => {
   try {
     const tasks = await Task.find();
@@ -59,7 +59,7 @@ router.get("/stats", auth, async (req, res) => {
 });
 
 
-// ✅ TOGGLE STATUS
+
 router.put("/:id/status", auth, async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);

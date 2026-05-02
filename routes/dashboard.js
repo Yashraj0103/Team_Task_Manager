@@ -4,7 +4,7 @@ const router = express.Router();
 const Task = require("../models/Task");
 const auth = require("../middleware/auth");
 
-// ✅ Dashboard API
+
 router.get("/", auth, async (req, res) => {
   try {
     const tasks = await Task.find();
