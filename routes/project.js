@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const Project = require("../models/Project");
+const Project = require("../models/project");
 const auth = require("../middleware/auth");
 
-// ✅ CREATE PROJECT
+
 router.post("/", auth, async (req, res) => {
   try {
     const { name, description } = req.body;
@@ -30,7 +30,7 @@ router.post("/", auth, async (req, res) => {
 });
 
 
-// ✅ GET PROJECTS
+
 router.get("/", auth, async (req, res) => {
   try {
     const projects = await Project.find();
