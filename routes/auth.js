@@ -5,7 +5,7 @@ const User = require("../models/user");
 
 const router = express.Router();
 
-// Signup
+
 router.post("/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -21,7 +21,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-// Login
+
 
 
 router.post("/login", async (req, res) => {
@@ -33,7 +33,7 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ msg: "User not found" });
     }
 
-    // ✅ FIX: compare hashed password
+
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
